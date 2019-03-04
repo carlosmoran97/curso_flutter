@@ -13,7 +13,10 @@ class ProductControl extends StatelessWidget {
       child: RaisedButton(
         child: Text('Add Product'),
         onPressed: () {
-          addProduct('Sweets');
+          addProduct({
+            'title':'Sweets',
+            'imageUrl':"assets/img/food.jpg"
+          });
         },
       ),
       margin: EdgeInsets.all(10.0),
