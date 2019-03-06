@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 class ProductPage extends StatelessWidget{
   
   final String title;
+  final String description;
+  final double price;
   final String imageUrl;
 
-  ProductPage(this.title, this.imageUrl);
+  ProductPage(this.title, this.imageUrl, this.description, this.price);
   
   void _showWarningDialog(BuildContext context){
     showDialog(
@@ -64,7 +66,19 @@ class ProductPage extends StatelessWidget{
             Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
-                title
+                title != null ? title : ''
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                description != null ? description : ''
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                price != null ? 'Precio: $price' : ''
               ),
             ),
             Padding(

@@ -4,6 +4,12 @@ import 'product_create_page.dart';
 import 'product_list_page.dart';
 
 class ProductAdminPage extends StatelessWidget {
+
+  final Function _addProduct;
+  final Function _deleteProduct;
+
+  ProductAdminPage(this._addProduct, this._deleteProduct);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -26,7 +32,9 @@ class ProductAdminPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: <Widget>[
-            ProductCreatePage(),
+            ProductCreatePage(
+              _addProduct
+            ),
             ProductListPage()
           ],
         ),

@@ -22,9 +22,9 @@ class MyApp extends StatefulWidget {
 
 class _MyApp extends State<MyApp>{
 
-  List<Map<String, String>> _products = [];
+  List<Map<String, dynamic>> _products = [];
 
-  void _addProduct(Map<String, String> product) {
+  void _addProduct(Map<String, dynamic> product) {
     setState(() {
       _products.add(product);
     });
@@ -42,19 +42,31 @@ class _MyApp extends State<MyApp>{
       theme: ThemeData(
         //brightness: Brightness.dark, // apariencia oscura, como modo nocturno :)
         brightness: Brightness.light,
-        primarySwatch: Colors.deepOrange,
-        accentColor: Colors.deepPurpleAccent
+        primarySwatch: const MaterialColor(0xFF001C3E, <int, Color>{
+          50: const Color(0xFF001C3E),
+          100: const Color(0xFF001C3E),
+          200: const Color(0xFF001C3E),
+          300: const Color(0xFF001C3E),
+          400: const Color(0xFF001C3E),
+          500: const Color(0xFF001C3E),
+          600: const Color(0xFF001C3E),
+          700: const Color(0xFF001C3E),
+          800: const Color(0xFF001C3E),
+          900: const Color(0xFF001C3E)
+        }),
+        accentColor: MaterialColor(0xFF00ECFD, <int, Color>{}),
       ),
       //home: AuthPage(),
       // no se puede tener el argument home y la ruta / al mismo tiempo
       // porque resulta reduntante
       routes: {
-        '/admin': (BuildContext context) => ProductAdminPage(),
         '/':(BuildContext context) => ProductsPage(
-          _products,
+          _products
+        ),
+        '/admin': (BuildContext context) => ProductAdminPage(
           _addProduct,
           _deleteProduct
-        )
+        ),
       },
       onGenerateRoute: (RouteSettings settings){
         final List<String> pathElements = settings.name.split('/');
@@ -66,7 +78,10 @@ class _MyApp extends State<MyApp>{
           return MaterialPageRoute<bool>(
             builder: (BuildContext context) => ProductPage(
               _products[index]['title'],
-              _products[index]['imageUrl']
+              //_products[index]['imageUrl']
+              'assets/img/food.jpg',
+              _products[index]['description'],
+              _products[index]['price']
             )
           );
         }
@@ -75,9 +90,7 @@ class _MyApp extends State<MyApp>{
         return MaterialPageRoute(
           builder: (BuildContext context) =>
             ProductsPage(
-              _products,
-              _addProduct,
-              _deleteProduct
+              _products
             )
         );
       },
