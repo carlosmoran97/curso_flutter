@@ -4,7 +4,6 @@ import 'product_create_page.dart';
 import 'product_list_page.dart';
 
 class ProductAdminPage extends StatelessWidget {
-
   final Function _addProduct;
   final Function _deleteProduct;
 
@@ -31,28 +30,28 @@ class ProductAdminPage extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
-            ProductCreatePage(
-              _addProduct
-            ),
-            ProductListPage()
-          ],
+          children: <Widget>[ProductCreatePage(_addProduct), ProductListPage()],
         ),
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              AppBar(
-                title: Text('Product Manager'),
-              ),
-              ListTile(
-                title: Text('All the products'),
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-              )
-            ],
+        drawer: _buildSideDrawer(context),
+      ),
+    );
+  }
+
+  Widget _buildSideDrawer(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          AppBar(
+            title: Text('Product Manager'),
           ),
-        ),
+          ListTile(
+            leading: Icon(Icons.shop),
+            title: Text('All the products'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/home');
+            },
+          )
+        ],
       ),
     );
   }

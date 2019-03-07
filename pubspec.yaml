@@ -68,3 +68,10 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
     - assets/img/food.jpg
+    - assets/img/background.jpg
+  
+  fonts:
+    - family: Oswald
+      fonts:
+        - asset: assets/font/Oswald-Bold.ttf
+          weight: 700

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProductCreatePage extends StatefulWidget {
-
   final Function addProduct;
 
   ProductCreatePage(this.addProduct);
@@ -16,104 +15,94 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String _titleValue = '';
   String _descriptionValue = '';
   double _priceValue = 0.00;
-  
+
   @override
   Widget build(BuildContext context) {
+
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double targetWidth = deviceWidth > 550 ? 500 : deviceWidth * 0.95;
+    final double targetPadding = deviceWidth - targetWidth;
     return Container(
         margin: EdgeInsets.all(10.0),
         child: ListView(
-        children: <Widget>[
-          TextField(
-            
-            decoration: InputDecoration(
-              labelText: 'Name',
-              icon: Icon(
-                Icons.add_shopping_cart
-              ),
+          padding: EdgeInsets.symmetric(
+            horizontal: targetPadding / 2
+          ),
+          children: <Widget>[
+            _buildTitleTextField(),
+            _buildDescriptionTextField(),
+            _buildPriceTextField(),
+            SizedBox(
+              height: 10.0,
             ),
-            onChanged: (String value) {
-              setState(() {
-                _titleValue = value;
-              });
-            },
-          ),
-          TextField(
-            decoration: InputDecoration(
-              icon: Icon(
-                Icons.description
-              ),
-              labelText: 'Description'
-            ),
-            maxLines: 4,
-            onChanged: (String value) {
-              setState(() {
-                _descriptionValue = value;
-              });
-            },
-          ),
-          TextField(
-            decoration: InputDecoration(
-              icon: Icon(
-                Icons.attach_money
-              ),
-              labelText: 'Price'
-            ),
-            keyboardType: TextInputType.number,
-            onChanged: (String value) {
-              setState(() {
-                _priceValue = double.parse(value);
-              });
-            },
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          RaisedButton(
-            child: Text('Save'),
-            onPressed: (){
-              final Map<String, dynamic> product = {
-                'title': _titleValue,
-                'description':_descriptionValue,
-                'price':_priceValue
-              };
+            RaisedButton(
+              child: Text('Save'),
+              onPressed: _submitForm,
+            )
+            // Powerful widget
+            // GestureDetector(
+            //   onTap: _submitForm,
+            //   child: Container(
+            //     color: Colors.green,
+            //     child: Text(
+            //       'My Button'
+            //     ),
+            //   ),
+            // ),
+          ],
+        ));
+  }
 
-              widget.addProduct(product);
+  void _submitForm() {
+    final Map<String, dynamic> product = {
+      'title': _titleValue,
+      'description': _descriptionValue,
+      'price': _priceValue,
+      'image': 'assets/img/food.jpg'
+    };
 
-              showDialog(
-                context: context,
-                builder: (BuildContext context){
-                  return AlertDialog(
-                    title: Text(
-                      'Exit'
-                    ),
-                    content: Text(
-                      'Product was saved succuessfuly'
-                    ),
-                    actions: <Widget>[
-                      RaisedButton(
-                        child: Text(
-                          'Ok',
-                          style: TextStyle(
-                            color: Colors.black
-                          ),
-                        ),
-                        onPressed: (){
-                          setState(() {
-                            _descriptionValue = '';
-                            _titleValue = '';
-                            _priceValue = 0.0;
-                          });
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  );
-                }
-              );
-            },
-          )
-        ],
-      )
+    widget.addProduct(product);
+
+    Navigator.pushReplacementNamed(context, '/home');
+  }
+
+  Widget _buildTitleTextField() {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: 'Name',
+        icon: Icon(Icons.add_shopping_cart),
+      ),
+      onChanged: (String value) {
+        setState(() {
+          _titleValue = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildDescriptionTextField() {
+    return TextField(
+      decoration: InputDecoration(
+          icon: Icon(Icons.description), labelText: 'Description'),
+      maxLines: 4,
+      onChanged: (String value) {
+        setState(() {
+          _descriptionValue = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildPriceTextField() {
+    return TextField(
+      decoration:
+          InputDecoration(icon: Icon(Icons.attach_money), labelText: 'Price'),
+      keyboardType: TextInputType.number,
+      onChanged: (String value) {
+        setState(() {
+          _priceValue = double.parse(value);
+        });
+      },
     );
   }
 }
