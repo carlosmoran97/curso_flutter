@@ -15,45 +15,60 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String _titleValue = '';
   String _descriptionValue = '';
   double _priceValue = 0.00;
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
   @override
   Widget build(BuildContext context) {
 
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550 ? 500 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
-    return Container(
+    
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Container(
         margin: EdgeInsets.all(10.0),
-        child: ListView(
-          padding: EdgeInsets.symmetric(
-            horizontal: targetPadding / 2
-          ),
-          children: <Widget>[
-            _buildTitleTextField(),
-            _buildDescriptionTextField(),
-            _buildPriceTextField(),
-            SizedBox(
-              height: 10.0,
+        child: Form(
+          key: _formKey,
+          child:ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: targetPadding / 2
             ),
-            RaisedButton(
-              child: Text('Save'),
-              onPressed: _submitForm,
-            )
-            // Powerful widget
-            // GestureDetector(
-            //   onTap: _submitForm,
-            //   child: Container(
-            //     color: Colors.green,
-            //     child: Text(
-            //       'My Button'
-            //     ),
-            //   ),
-            // ),
-          ],
-        ));
+            children: <Widget>[
+              _buildTitleTextField(),
+              _buildDescriptionTextField(),
+              _buildPriceTextField(),
+              SizedBox(
+                height: 10.0,
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                onPressed: _submitForm,
+              )
+              // Powerful widget
+              // GestureDetector(
+              //   onTap: _submitForm,
+              //   child: Container(
+              //     color: Colors.green,
+              //     child: Text(
+              //       'My Button'
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      )
+    );
   }
 
   void _submitForm() {
+    if(!_formKey.currentState.validate()){
+      return ;
+    }
+    _formKey.currentState.save();
     final Map<String, dynamic> product = {
       'title': _titleValue,
       'description': _descriptionValue,
@@ -67,41 +82,54 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   }
 
   Widget _buildTitleTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
         labelText: 'Name',
         icon: Icon(Icons.add_shopping_cart),
       ),
-      onChanged: (String value) {
-        setState(() {
-          _titleValue = value;
-        });
+      onSaved: (String value) {
+        
+        _titleValue = value;
+        
+      },
+      validator: (String value){
+        if(value.isEmpty){
+          return 'Title is required';
+        }
       },
     );
   }
 
   Widget _buildDescriptionTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
           icon: Icon(Icons.description), labelText: 'Description'),
       maxLines: 4,
-      onChanged: (String value) {
-        setState(() {
-          _descriptionValue = value;
-        });
+      onSaved: (String value) {
+        
+        _descriptionValue = value;
+        
+      },
+      validator: (String value){
+        
       },
     );
   }
 
   Widget _buildPriceTextField() {
-    return TextField(
+    return TextFormField(
       decoration:
           InputDecoration(icon: Icon(Icons.attach_money), labelText: 'Price'),
       keyboardType: TextInputType.number,
-      onChanged: (String value) {
-        setState(() {
-          _priceValue = double.parse(value);
-        });
+      onSaved: (String value) {
+        
+        _priceValue = double.parse(value);
+        
+      },
+      validator: (String value){
+        if (value.isEmpty || !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
+          return 'Price is required and should be a number.';
+        }
       },
     );
   }

@@ -6,12 +6,17 @@ import 'product_list_page.dart';
 class ProductAdminPage extends StatelessWidget {
   final Function _addProduct;
   final Function _deleteProduct;
+  final List<Map<String, dynamic>> _products;
 
-  ProductAdminPage(this._addProduct, this._deleteProduct);
+  ProductAdminPage(this._addProduct, this._deleteProduct, this._products);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -30,10 +35,14 @@ class ProductAdminPage extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: <Widget>[ProductCreatePage(_addProduct), ProductListPage()],
+          children: <Widget>[
+            ProductCreatePage(_addProduct),
+            ProductListPage(_products)
+          ],
         ),
         drawer: _buildSideDrawer(context),
       ),
+    )
     );
   }
 

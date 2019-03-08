@@ -57,7 +57,8 @@ class ProductPage extends StatelessWidget {
             appBar: AppBar(
               title: Text('Product Details'),
             ),
-            body: Column(
+            body: SingleChildScrollView(
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image.asset(imageUrl),
@@ -78,7 +79,7 @@ class ProductPage extends StatelessWidget {
                   ),
                 )
               ],
-            )));
+            ))));
   }
 
   Widget _buildAddressPriceRow() {
