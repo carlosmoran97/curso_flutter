@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
-class ProductCreatePage extends StatefulWidget {
+class ProductEditPage extends StatefulWidget {
+  
   final Function addProduct;
+  final Function editProduct;
+  final Map<String, dynamic> product;
 
-  ProductCreatePage(this.addProduct);
+  ProductEditPage({this.addProduct, this.editProduct, this.product});
 
   @override
   State<StatefulWidget> createState() {
-    return _ProductCreatePageState();
+    return _ProductEditPageState();
   }
 }
 
-class _ProductCreatePageState extends State<ProductCreatePage> {
-  String _titleValue = '';
-  String _descriptionValue = '';
-  double _priceValue = 0.00;
+class _ProductEditPageState extends State<ProductEditPage> {
+  final Map<String, dynamic> _formValues = {
+    'title': null,
+    'description': null,
+    'price': null,
+    'image': 'assets/img/food.jpg'
+  };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   
   @override
@@ -69,14 +75,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       return ;
     }
     _formKey.currentState.save();
-    final Map<String, dynamic> product = {
-      'title': _titleValue,
-      'description': _descriptionValue,
-      'price': _priceValue,
-      'image': 'assets/img/food.jpg'
-    };
 
-    widget.addProduct(product);
+    widget.addProduct(_formValues);
 
     Navigator.pushReplacementNamed(context, '/home');
   }
@@ -89,7 +89,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       ),
       onSaved: (String value) {
         
-        _titleValue = value;
+        _formValues['title'] = value;
         
       },
       validator: (String value){
@@ -107,7 +107,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       maxLines: 4,
       onSaved: (String value) {
         
-        _descriptionValue = value;
+        _formValues['description'] = value;
         
       },
       validator: (String value){
@@ -123,7 +123,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       keyboardType: TextInputType.number,
       onSaved: (String value) {
         
-        _priceValue = double.parse(value);
+        _formValues['price'] = double.parse(value);
         
       },
       validator: (String value){
