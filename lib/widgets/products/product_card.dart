@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:scoped_model/scoped_model.dart';
 import './price_tag.dart';
 import '../ui_elements/title_default.dart';
 import '../ui_elements/address_card.dart';
+import '../../models/product.dart';
+import '../../scoped-models/main.dart';
 
 class ProductCard extends StatelessWidget {
-  final Map<String, dynamic> _product;
+  final Product _product;
   final int _index;
 
   ProductCard(this._product, this._index);
@@ -15,7 +17,7 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(_product['image']),
+          Image.asset(_product.image),
           _buildTitlePriceRow(),
           AddressCard('Santa Tecla, El Salvador'),
           _buildButtonBar(context)
@@ -28,16 +30,15 @@ class ProductCard extends StatelessWidget {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       Container(
           padding: EdgeInsets.only(top: 10.0),
-          child: TitleDefault(_product['title'])),
+          child: TitleDefault(_product.title)),
       SizedBox(
         width: 10.0,
       ),
-      PriceTag(_product['price'].toStringAsFixed(2))
+      PriceTag(_product.price.toStringAsFixed(2))
     ]);
   }
 
-  Widget _buildButtonBar(BuildContext context) 
-  {
+  Widget _buildButtonBar(BuildContext context) {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -50,21 +51,22 @@ class ProductCard extends StatelessWidget {
           onPressed: () => Navigator.pushNamed<bool>(
               context, '/product/${_index.toString()}'),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.favorite_border,
-            color: Colors.red,
-          ),
-          iconSize: 24.0,
-          onPressed: () {
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('Added to favourites!'),
-              duration: Duration(seconds: 1),
-            ));
+        ScopedModelDescendant(
+          builder: (BuildContext context, Widget child, MainModel model) {
+            return IconButton(
+              icon: Icon(
+                model.products[_index].isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.red,
+              ),
+              iconSize: 24.0,
+              onPressed: () {
+                model.selectProduct(_index);
+                model.toggleProductFavoriteStatus();
+              },
+            );
           },
         )
       ],
     );
   }
-  
 }
